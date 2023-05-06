@@ -1,0 +1,56 @@
+programa prueba;
+
+tipo
+
+  FECHA = registro {
+    DIA : entero;
+    MES : entero;
+    ANNO : entero;
+    }
+
+  dia_semana = ("lunes","martes","miércoles","jueves","viernes");
+
+  t_hash_cadenas = lista asociativa de cadena;
+
+constante
+
+  PI : real = 3'141592;  // constante del programa
+
+variable
+
+  HOY : dia_semana;
+
+  /* esto es un
+     comentario multilinea
+     pero que sigue en otra linea */
+
+  lista_int : lista [1..100] de entero = [ 1, \x7AF, \25, 400];
+  acumulador : entero;
+  mi_hash : lista asociativa de entero;
+
+  lista_cadenas : t_hash_cadenas = [ "uno"  => "prueba\
+                                      ",
+                                     "dos"  => "fantastico",
+                                     "tres" => "\nRadio de la /*circunferencia*/\
+                                                \151\144\X69\157\x74\141: "];
+
+  lista_real : lista [1..100] de real = [ '45^-27, 5'21^18, 91'01];
+
+{
+  HOY = "martes";
+
+  en caso HOY sea
+    "lunes" .. "jueves"  => { trabajo(); }
+    "viernes" | "sabado" => { trabajo(); deporte(); }
+     otro                => { ; };
+
+  valor = mi_hash[hoy];   // lectura de un valor de una lista asociativa
+  imprimir(mi_hash[hoy]);
+
+  mi_hash[manana] = 123;  // escritura de un valor (manana es una variable de tipo FECHA)
+
+  acumulador = 0;
+  para elemento_int en lista_int {
+    acumulador = acumulador + elemento_int;
+    }
+}
