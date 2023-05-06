@@ -126,69 +126,81 @@ extern int yydebug;
      CTC_BOOLEANA = 271,
      CTC_CADENA = 272,
      CTC_CARACTER = 273,
-     CTC_ENTERA = 274,
-     CTC_REAL = 275,
-     CONSTRUCTOR = 276,
-     CUANDO = 277,
-     CUATRO_PTOS = 278,
-     DESCENDENTE = 279,
-     DESPD = 280,
-     DESPI = 281,
-     DESTRUCTOR = 282,
-     DE = 283,
-     DEVOLVER = 284,
-     DOS_PTOS = 285,
-     EJECUTA = 286,
-     ELEMENTO = 287,
-     EN = 288,
-     ENTERO = 289,
-     ENTONCES = 290,
-     EQ = 291,
-     ESPECIFICO = 292,
-     EXCEPTO = 293,
-     FICHERO = 294,
-     FINAL = 295,
-     FINALMENTE = 296,
-     FLECHA_DOBLE = 297,
-     FUNCION = 298,
-     GEQ = 299,
-     GENERICO = 300,
-     HASTA = 301,
-     IDENTIFICADOR = 302,
-     INTERFAZ = 303,
-     LANZAR = 304,
-     LEQ = 305,
-     LISTA = 306,
-     MIENTRAS = 307,
-     MODIFICABLE = 308,
-     NEQ = 309,
-     OTRO = 310,
-     OR = 311,
-     PAQUETE = 312,
-     PARA = 313,
-     PATH = 314,
-     POTENCIA = 315,
-     PRIVADO = 316,
-     PROBAR = 317,
-     PROCEDIMIENTO = 318,
-     PROGRAMA = 319,
-     PUBLICO = 320,
-     REAL = 321,
-     REGISTRO = 322,
-     REPITE = 323,
-     SEA = 324,
-     SALIR = 325,
-     SEMIPUBLICO = 326,
-     SI = 327,
-     SINO = 328,
-     TIPO = 329,
-     VARIABLE = 330
+     CONSTRUCTOR = 274,
+     CUANDO = 275,
+     CUATRO_PTOS = 276,
+     DESCENDENTE = 277,
+     DESPD = 278,
+     DESPI = 279,
+     DESTRUCTOR = 280,
+     DE = 281,
+     DEVOLVER = 282,
+     DOS_PTOS = 283,
+     EJECUTA = 284,
+     ELEMENTO = 285,
+     EN = 286,
+     ENTERO = 287,
+     ENTONCES = 288,
+     EQ = 289,
+     ESPECIFICO = 290,
+     EXCEPTO = 291,
+     FICHERO = 292,
+     FINAL = 293,
+     FINALMENTE = 294,
+     FLECHA_DOBLE = 295,
+     FUNCION = 296,
+     GEQ = 297,
+     GENERICO = 298,
+     HASTA = 299,
+     IDENTIFICADOR = 300,
+     INTERFAZ = 301,
+     LANZAR = 302,
+     LEQ = 303,
+     LISTA = 304,
+     MIENTRAS = 305,
+     MODIFICABLE = 306,
+     NEQ = 307,
+     OTRO = 308,
+     OR = 309,
+     PAQUETE = 310,
+     PARA = 311,
+     PATH = 312,
+     POTENCIA = 313,
+     PRIVADO = 314,
+     PROBAR = 315,
+     PROCEDIMIENTO = 316,
+     PROGRAMA = 317,
+     PUBLICO = 318,
+     REAL = 319,
+     REGISTRO = 320,
+     REPITE = 321,
+     SEA = 322,
+     SALIR = 323,
+     SEMIPUBLICO = 324,
+     SI = 325,
+     SINO = 326,
+     TIPO = 327,
+     VARIABLE = 328,
+     CTC_ENTERA = 329,
+     CTC_REAL = 330
    };
 #endif
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+/* Line 387 of yacc.c  */
+#line 14 "moronico.y"
+
+int entero; 
+double real;
+char * texto; 
+
+
+/* Line 387 of yacc.c  */
+#line 203 "moronico.tab.c"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -215,7 +227,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 219 "moronico.tab.c"
+#line 231 "moronico.tab.c"
 
 #ifdef short
 # undef short
@@ -435,10 +447,10 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   5
+#define YYLAST   59
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  76
+#define YYNTOKENS  92
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
@@ -459,16 +471,16 @@ static const yytype_uint8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    77,     2,     2,     2,    80,     2,     2,
+      84,    85,    78,     2,     2,    76,    91,    79,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    89,    81,
+       2,    86,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    87,     2,    88,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    82,    90,    83,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -503,14 +515,14 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      77,     0,    -1,    19,    -1,    20,    -1,    17,    -1,    18,
+      93,     0,    -1,    74,    -1,    75,    -1,    17,    -1,    18,
       -1,    16,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   512,   512,   513,   514,   515,   516
+       0,    36,   525,   526,   527,   528,   529
 };
 #endif
 
@@ -522,16 +534,18 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "ABSTRACTO", "AND", "ASOCIATIVA",
   "BOOLEANO", "CABECERA", "CADENA", "CASO", "CARACTER", "CARGA", "CLASE",
   "CONJUNTO", "CONSTANTE", "CUERPO", "CTC_BOOLEANA", "CTC_CADENA",
-  "CTC_CARACTER", "CTC_ENTERA", "CTC_REAL", "CONSTRUCTOR", "CUANDO",
-  "CUATRO_PTOS", "DESCENDENTE", "DESPD", "DESPI", "DESTRUCTOR", "DE",
-  "DEVOLVER", "DOS_PTOS", "EJECUTA", "ELEMENTO", "EN", "ENTERO",
-  "ENTONCES", "EQ", "ESPECIFICO", "EXCEPTO", "FICHERO", "FINAL",
-  "FINALMENTE", "FLECHA_DOBLE", "FUNCION", "GEQ", "GENERICO", "HASTA",
-  "IDENTIFICADOR", "INTERFAZ", "LANZAR", "LEQ", "LISTA", "MIENTRAS",
-  "MODIFICABLE", "NEQ", "OTRO", "OR", "PAQUETE", "PARA", "PATH",
-  "POTENCIA", "PRIVADO", "PROBAR", "PROCEDIMIENTO", "PROGRAMA", "PUBLICO",
-  "REAL", "REGISTRO", "REPITE", "SEA", "SALIR", "SEMIPUBLICO", "SI",
-  "SINO", "TIPO", "VARIABLE", "$accept", "expresion_constante", YY_NULL
+  "CTC_CARACTER", "CONSTRUCTOR", "CUANDO", "CUATRO_PTOS", "DESCENDENTE",
+  "DESPD", "DESPI", "DESTRUCTOR", "DE", "DEVOLVER", "DOS_PTOS", "EJECUTA",
+  "ELEMENTO", "EN", "ENTERO", "ENTONCES", "EQ", "ESPECIFICO", "EXCEPTO",
+  "FICHERO", "FINAL", "FINALMENTE", "FLECHA_DOBLE", "FUNCION", "GEQ",
+  "GENERICO", "HASTA", "IDENTIFICADOR", "INTERFAZ", "LANZAR", "LEQ",
+  "LISTA", "MIENTRAS", "MODIFICABLE", "NEQ", "OTRO", "OR", "PAQUETE",
+  "PARA", "PATH", "POTENCIA", "PRIVADO", "PROBAR", "PROCEDIMIENTO",
+  "PROGRAMA", "PUBLICO", "REAL", "REGISTRO", "REPITE", "SEA", "SALIR",
+  "SEMIPUBLICO", "SI", "SINO", "TIPO", "VARIABLE", "CTC_ENTERA",
+  "CTC_REAL", "'-'", "'!'", "'*'", "'/'", "'%'", "';'", "'{'", "'}'",
+  "'('", "')'", "'='", "'['", "']'", "':'", "'|'", "'.'", "$accept",
+  "expresion_constante", YY_NULL
 };
 #endif
 
@@ -547,14 +561,16 @@ static const yytype_uint16 yytoknum[] =
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
      305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
      315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
-     325,   326,   327,   328,   329,   330
+     325,   326,   327,   328,   329,   330,    45,    33,    42,    47,
+      37,    59,   123,   125,    40,    41,    61,    91,    93,    58,
+     124,    46
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    76,    77,    77,    77,    77,    77
+       0,    92,    93,    93,    93,    93,    93
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -582,7 +598,7 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -17
 static const yytype_int8 yypact[] =
 {
-     -16,   -17,   -17,   -17,   -17,   -17,     5,   -17
+     -16,   -17,   -17,   -17,   -17,   -17,     3,   -17
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -597,7 +613,12 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       1,     2,     3,     4,     5,     7
+       1,     2,     3,     7,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     4,     5
 };
 
 #define yypact_value_is_default(Yystate) \
@@ -606,16 +627,21 @@ static const yytype_uint8 yytable[] =
 #define yytable_value_is_error(Yytable_value) \
   YYID (0)
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-      16,    17,    18,    19,    20,     0
+      16,    17,    18,     0,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    74,    75
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    16,    17,    18,    19,    20,    77,     0
+       0,    16,    17,    18,    74,    75,    93,     0
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1417,37 +1443,37 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 512 "moronico.y"
+#line 525 "moronico.y"
     {printf ("expresion_constante -> CTC_ENTERA");}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
-#line 513 "moronico.y"
+#line 526 "moronico.y"
     {printf ("expresion_constante -> CTC_REAL");}
     break;
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 514 "moronico.y"
+#line 527 "moronico.y"
     {printf ("expresion_constante -> CTC_CADENA");}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 515 "moronico.y"
+#line 528 "moronico.y"
     {printf ("expresion_constante -> CTC_CARACTER");}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 516 "moronico.y"
+#line 529 "moronico.y"
     {printf ("expresion_constante -> CTC_BOOLEANA");}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1451 "moronico.tab.c"
+#line 1477 "moronico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1679,7 +1705,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 543 "moronico.y"
+#line 556 "moronico.y"
 
 
 int yyerror(char *s) {
@@ -1702,4 +1728,4 @@ int main(int argc, char *argv[]) {
     yyin = fopen(argv[1],"r");
     yyparse();
     }
-  }
+}
