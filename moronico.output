@@ -1,0 +1,230 @@
+Terminals unused in grammar
+
+   ABSTRACTO
+   AND
+   ASOCIATIVA
+   BOOLEANO
+   CABECERA
+   CADENA
+   CASO
+   CARACTER
+   CARGA
+   CLASE
+   CONJUNTO
+   CONSTANTE
+   CUERPO
+   CONSTRUCTOR
+   CUANDO
+   CUATRO_PTOS
+   DESCENDENTE
+   DESPD
+   DESPI
+   DESTRUCTOR
+   DE
+   DEVOLVER
+   DOS_PTOS
+   EJECUTA
+   ELEMENTO
+   EN
+   ENTERO
+   ENTONCES
+   EQ
+   ESPECIFICO
+   EXCEPTO
+   FICHERO
+   FINAL
+   FINALMENTE
+   FLECHA_DOBLE
+   FUNCION
+   GEQ
+   GENERICO
+   HASTA
+   IDENTIFICADOR
+   INTERFAZ
+   LANZAR
+   LEQ
+   LISTA
+   MIENTRAS
+   MODIFICABLE
+   NEQ
+   OTRO
+   OR
+   PAQUETE
+   PARA
+   PATH
+   POTENCIA
+   PRIVADO
+   PROBAR
+   PROCEDIMIENTO
+   PROGRAMA
+   PUBLICO
+   REAL
+   REGISTRO
+   REPITE
+   SEA
+   SALIR
+   SEMIPUBLICO
+   SI
+   SINO
+   TIPO
+   VARIABLE
+
+
+Grammar
+
+    0 $accept: expresion_constante $end
+
+    1 expresion_constante: CTC_ENTERA
+    2                    | CTC_REAL
+    3                    | CTC_CADENA
+    4                    | CTC_CARACTER
+    5                    | CTC_BOOLEANA
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ABSTRACTO (258)
+AND (259)
+ASOCIATIVA (260)
+BOOLEANO (261)
+CABECERA (262)
+CADENA (263)
+CASO (264)
+CARACTER (265)
+CARGA (266)
+CLASE (267)
+CONJUNTO (268)
+CONSTANTE (269)
+CUERPO (270)
+CTC_BOOLEANA (271) 5
+CTC_CADENA (272) 3
+CTC_CARACTER (273) 4
+CTC_ENTERA (274) 1
+CTC_REAL (275) 2
+CONSTRUCTOR (276)
+CUANDO (277)
+CUATRO_PTOS (278)
+DESCENDENTE (279)
+DESPD (280)
+DESPI (281)
+DESTRUCTOR (282)
+DE (283)
+DEVOLVER (284)
+DOS_PTOS (285)
+EJECUTA (286)
+ELEMENTO (287)
+EN (288)
+ENTERO (289)
+ENTONCES (290)
+EQ (291)
+ESPECIFICO (292)
+EXCEPTO (293)
+FICHERO (294)
+FINAL (295)
+FINALMENTE (296)
+FLECHA_DOBLE (297)
+FUNCION (298)
+GEQ (299)
+GENERICO (300)
+HASTA (301)
+IDENTIFICADOR (302)
+INTERFAZ (303)
+LANZAR (304)
+LEQ (305)
+LISTA (306)
+MIENTRAS (307)
+MODIFICABLE (308)
+NEQ (309)
+OTRO (310)
+OR (311)
+PAQUETE (312)
+PARA (313)
+PATH (314)
+POTENCIA (315)
+PRIVADO (316)
+PROBAR (317)
+PROCEDIMIENTO (318)
+PROGRAMA (319)
+PUBLICO (320)
+REAL (321)
+REGISTRO (322)
+REPITE (323)
+SEA (324)
+SALIR (325)
+SEMIPUBLICO (326)
+SI (327)
+SINO (328)
+TIPO (329)
+VARIABLE (330)
+
+
+Nonterminals, with rules where they appear
+
+$accept (76)
+    on left: 0
+expresion_constante (77)
+    on left: 1 2 3 4 5, on right: 0
+
+
+State 0
+
+    0 $accept: . expresion_constante $end
+
+    CTC_BOOLEANA  shift, and go to state 1
+    CTC_CADENA    shift, and go to state 2
+    CTC_CARACTER  shift, and go to state 3
+    CTC_ENTERA    shift, and go to state 4
+    CTC_REAL      shift, and go to state 5
+
+    expresion_constante  go to state 6
+
+
+State 1
+
+    5 expresion_constante: CTC_BOOLEANA .
+
+    $default  reduce using rule 5 (expresion_constante)
+
+
+State 2
+
+    3 expresion_constante: CTC_CADENA .
+
+    $default  reduce using rule 3 (expresion_constante)
+
+
+State 3
+
+    4 expresion_constante: CTC_CARACTER .
+
+    $default  reduce using rule 4 (expresion_constante)
+
+
+State 4
+
+    1 expresion_constante: CTC_ENTERA .
+
+    $default  reduce using rule 1 (expresion_constante)
+
+
+State 5
+
+    2 expresion_constante: CTC_REAL .
+
+    $default  reduce using rule 2 (expresion_constante)
+
+
+State 6
+
+    0 $accept: expresion_constante . $end
+
+    $end  shift, and go to state 7
+
+
+State 7
+
+    0 $accept: expresion_constante $end .
+
+    $default  accept
