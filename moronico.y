@@ -27,6 +27,7 @@ char * texto;
 %right */
 
 
+
 %%
 
 /********************************/
@@ -490,6 +491,7 @@ descendente_interrogacion : DESCENDENTE {printf ("descendente_interrogacion -> D
 instruccion_probar_excepto : PROBAR bloque_instrucciones              {printf ("instruccion_probar_excepto -> PROBAR bloque_instrucciones");}
                              EXCEPTO clausula_excepcion_mas           {printf ("instruccion_probar_excepto -> EXCEPTO clausula_excepcion_mas");}
                              bloque_instrucciones_final_interrogacion {printf ("instruccion_probar_excepto -> bloque_instrucciones_final_interrogacion");}
+
 ;
 
 clausula_excepcion_mas : clausula_excepcion {printf ("clausula_excepcion_mas -> clausula_excepcion");}
