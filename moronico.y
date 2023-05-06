@@ -1,4 +1,4 @@
- 
+
 %{
 
   #include <stdio.h>
@@ -24,7 +24,7 @@ char * texto;
 
 %nonassoc '-' '!'
 %left '*' '/' '%' 
-%right 
+//%right 
 
 
 %%
@@ -47,7 +47,7 @@ identificador_cuatro_ptos_asterisco: IDENTIFICADOR CUATRO_PTOS {printf ("identif
 |                                                                {printf ("identificador_cuatro_ptos_asterisco -> vacio");};
 ;
 
-bloque_programa :   declaracion_cargas_interrogacion {printf ("bloque_programa -> declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");};
+bloque_programa :   declaracion_cargas_interrogacion {printf ("bloque_programa -> declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");}
                     declaracion_tipos_interrogacion 
                     declaracion_constantes_interrogacion 
                     declaracion_variables_interrogacion 
@@ -87,7 +87,7 @@ instruccion_asterisco : instruccion //1
 definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf ("definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo");};
 ;
 
-seccion_cabecera : CABECERA {printf ("seccion_cabecera -> CABECERA declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_interfaces");};
+seccion_cabecera : CABECERA {printf ("seccion_cabecera -> CABECERA declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_interfaces");}
                    declaracion_cargas_interrogacion 
                    declaracion_tipos_interrogacion 
                    declaracion_constantes_interrogacion 
@@ -99,7 +99,7 @@ declaracion_interfaces_interrogacion : declaracion_interfaces {printf ("declarac
 |                                                             {printf ("declaracion_interfaces_interrogacion -> vacio");};
 ;
 
-seccion_cuerpo : CUERPO {printf ("seccion_cuerpo -> CUERPO declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_subprograma_mas");};
+seccion_cuerpo : CUERPO {printf ("seccion_cuerpo -> CUERPO declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_subprograma_mas");}
                  declaracion_tipos_interrogacion 
                  declaracion_constantes_interrogacion 
                  declaracion_variables_interrogacion 
@@ -215,7 +215,7 @@ expresion : |expresion_constante  {printf ("expresion -> expresion_constante");}
             |expresion_primaria   {printf ("expresion -> expresion_primaria");};
 ;
 
-declaracion_clase : CLASE {printf ("declaracion_clase -> CLASE final_interrogacion nombre_mas_interrogacion '{' declaraciones_publicas declaraciones_semi_interrogacion declaraciones_privadas_interrogacion '}'");};
+declaracion_clase : CLASE {printf ("declaracion_clase -> CLASE final_interrogacion nombre_mas_interrogacion '{' declaraciones_publicas declaraciones_semi_interrogacion declaraciones_privadas_interrogacion '}'");}
                     final_interrogacion 
                     nombre_mas_interrogacion 
                     '{' 
@@ -331,7 +331,7 @@ declaracion_variable_mas : declaracion_variable {printf ("declaracion_variable_m
 | declaracion_variable_mas declaracion_variable {printf ("declaracion_variable_mas -> declaracion_variable_mas declaracion_variable");};
 ;
 
-declaracion_variable : nombre_mas':' tipo_no_estructurado_o_nombre_tipo {printf ("declaracion_variable -> nombre_mas':' tipo_no_estructurado_o_nombre_tipo valor_constante_interrogacion ';'");};
+declaracion_variable : nombre_mas':' tipo_no_estructurado_o_nombre_tipo {printf ("declaracion_variable -> nombre_mas':' tipo_no_estructurado_o_nombre_tipo valor_constante_interrogacion ';'");}
                        valor_constante_interrogacion ';' 
 
 valor_constante_interrogacion : '=' valor_constante {printf ("valor_constante_interrogacion ->'=' valor_constante");};
@@ -358,7 +358,7 @@ cabecera_subprograma : cabecera_funcion {printf ("cabecera_subprograma -> cabece
 | cabecera_destructor                   {printf ("cabecera_subprograma -> cabecera_destructor");};
 ;
 
-cabecera_funcion : FUNCION {printf ("cabecera_funcion -> FUNCION nombre declaracion_parametros_interrogacion FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo");};
+cabecera_funcion : FUNCION {printf ("cabecera_funcion -> FUNCION nombre declaracion_parametros_interrogacion FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo");}
                    nombre 
                    declaracion_parametros_interrogacion 
                    FLECHA_DOBLE 
@@ -392,7 +392,7 @@ modificable_interrogacion : MODIFICABLE {printf ("modificable_interrogacion -> M
 |                                       {printf ("modificable_interrogacion -> vacio");};
 ;
 
-bloque_subprograma : declaracion_tipos_interrogacion {printf ("bloque_subprograma -> declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");};
+bloque_subprograma : declaracion_tipos_interrogacion {printf ("bloque_subprograma -> declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");}
                      declaracion_constantes_interrogacion
                      declaracion_variables_interrogacion
                      bloque_instrucciones
@@ -442,9 +442,9 @@ expresion_asterisco : expresion {printf ("expresion_asterisco -> expresion");};
 |                               {printf ("expresion_asterisco -> vacio");};
 ;
 
-instruccion_si : SI expresion                            {printf ("instruccion_si -> SI expresion");};
-                 ENTONCES bloque_instrucciones           {printf ("instruccion_si -> ENTONCES bloque_instrucciones");};
-                 bloque_instrucciones_sino_interrogacion {printf ("instruccion_si -> bloque_instrucciones_sino_interrogacion");};
+instruccion_si : SI expresion                            {printf ("instruccion_si -> SI expresion ENTONCES bloque_instrucciones bloque_instrucciones_sino_interrogacion");}
+                 ENTONCES bloque_instrucciones           
+                 bloque_instrucciones_sino_interrogacion 
 ;
 
 bloque_instrucciones_sino_interrogacion : SINO bloque_instrucciones {printf ("bloque_instrucciones_sino_interrogacion -> SINO bloque_instrucciones");};
@@ -487,9 +487,9 @@ descendente_interrogacion : DESCENDENTE {printf ("descendente_interrogacion -> D
 |
 ;
 
-instruccion_probar_excepto : PROBAR bloque_instrucciones              {printf ("instruccion_probar_excepto -> PROBAR bloque_instrucciones");};
-                             EXCEPTO clausula_excepcion_mas           {printf ("instruccion_probar_excepto -> EXCEPTO clausula_excepcion_mas");};
-                             bloque_instrucciones_final_interrogacion {printf ("instruccion_probar_excepto -> bloque_instrucciones_final_interrogacion");};
+instruccion_probar_excepto : PROBAR bloque_instrucciones              {printf ("instruccion_probar_excepto -> PROBAR bloque_instrucciones EXCEPTO clausula_excepcion_mas bloque_instrucciones_final_interrogacion");}
+                             EXCEPTO clausula_excepcion_mas           
+                             bloque_instrucciones_final_interrogacion 
 ;
 
 clausula_excepcion_mas : clausula_excepcion {printf ("clausula_excepcion_mas -> clausula_excepcion");};
