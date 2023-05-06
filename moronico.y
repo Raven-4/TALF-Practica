@@ -25,6 +25,9 @@ char * texto;
 %nonassoc '-' '!'
 %left '*' '/' '%' 
 %right */
+%left '-' '+'
+%left '*' '/'
+%right '^'
 
 
 
@@ -536,9 +539,26 @@ expresion_primaria : expresion_constante  {printf ("expresion_primaria -> expres
 ;
 
 objeto : nombre                       {printf ("objeto -> nombre");}
-      | objeto '[' expresion ']'      {printf ("objeto -> objeto '[' expresion_mas ']'");}
+      | objeto '['  expresion  ']'    {printf ("objeto -> objeto '[' expresion ']'");}
       | objeto '.' IDENTIFICADOR      {printf ("objeto -> objeto '.' IDENTIFICADOR");}
 ;
+
+expresion_unaria : operador_unario
+;
+
+operador_unario : '-'
+                | '!'
+;
+
+operador_binario : 
+                |
+;
+
+expresion : expresion_constante
+          | expresion_primaria
+          | expresion_unaria
+;
+
 
 /*
 expresion_mas : expresion {printf ("expresion_mas -> expresion");}
