@@ -6,7 +6,7 @@
 %}
 
 %option yylineno
-/*prueba*/
+
 PALABRA_RESERVADA                   (?i:abstracto|asociativa|booleano|cabecera|cadena|caso|caracter|clase|conjunto|constante|cuerpo|constructor|cuando|descendente|destructor|de|devolver|carga|elemento|ejecuta|en|entero|entonces|especifico|excepto|fichero|final|finalmente|funcion|generico|hasta|interfaz|lanzar|lista|mientras|modificable|otro|paquete|para|privado|probar|procedimiento|programa|publico|real|registro|repite|salir|sea|semipublico|si|sino|tipo|variable)
 IDENTIFICADOR                       [a-zA-Z_][a-zA-Z0-9_]*
 CONSTANTE_ENTERA                    ([0-9]+)|(\\[0-7]+)|(\\x|\\X)[0-9a-fA-F]+
