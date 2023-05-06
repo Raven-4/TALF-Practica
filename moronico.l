@@ -1,7 +1,6 @@
 %{
   #include <string.h>
   #include <stdio.h>
-  #include "moronico.h"
   #include "moronico.tab.h"
 %}
 
@@ -17,7 +16,6 @@ PATH                                \"\.{0,2}\/[^\"\n]*\"
 DELIMITADOR                         ::|\.\.|[{}():\;,\|]|=>
 OPERADOR                            =|\+|\-|\*|\/|%|\*\*|\.|\[|\]|<\-|\->|@|~|&|<|>|=<|>=|:=|!=|!|\/\\|\\\/
 COMENTARIO                          \/\/.*|\/\*([^*]|(\*+([^*\/])))*\*+\/
-
 
 %%
 
@@ -195,20 +193,3 @@ COMENTARIO                          \/\/.*|\/\*([^*]|(\*+([^*\/])))*\*+\/
 .                             printf("línea %d, error: %s\n", yylineno, yytext);
 
 %%
-
-int yywrap()
-{
-  return(1);
-}
-
-int main(int argc, char *argv[]) {
-
-  if (argc < 2) {
-    printf("Uso: ./moronico NombreArchivo\n");
-    exit(1);
-  }
-
-  yyin = fopen(argv[1],"r");
-
-  while(yylex());
-}
