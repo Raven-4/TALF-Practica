@@ -7,543 +7,540 @@
   #define YYDEBUG 1
 
 %} 
-/*
+
 %token ABSTRACTO AND ASOCIATIVA BOOLEANO CABECERA CADENA CASO CARACTER CARGA CLASE CONJUNTO CONSTANTE CUERPO CTC_BOOLEANA CTC_CADENA CTC_CARACTER CTC_ENTERA CTC_REAL CONSTRUCTOR CUANDO CUATRO_PTOS DESCENDENTE DESPD DESPI DESTRUCTOR DE DEVOLVER DOS_PTOS EJECUTA ELEMENTO EN ENTERO ENTONCES EQ ESPECIFICO EXCEPTO FICHERO FINAL FINALMENTE FLECHA_DOBLE FUNCION GEQ GENERICO HASTA IDENTIFICADOR INTERFAZ LANZAR LEQ LISTA MIENTRAS MODIFICABLE NEQ OTRO OR PAQUETE PARA PATH POTENCIA PRIVADO PROBAR PROCEDIMIENTO PROGRAMA PUBLICO REAL REGISTRO REPITE SEA SALIR SEMIPUBLICO SI SINO TIPO VARIABLE
-*/
 
-%union {
-int entero; 
-double real;
-char * texto; 
-}
-
-%token <texto> ABSTRACTO AND ASOCIATIVA BOOLEANO CABECERA CADENA CASO CARACTER CARGA CLASE CONJUNTO CONSTANTE CUERPO CTC_BOOLEANA CTC_CADENA CTC_CARACTER CONSTRUCTOR CUANDO CUATRO_PTOS DESCENDENTE DESPD DESPI DESTRUCTOR DE DEVOLVER DOS_PTOS EJECUTA ELEMENTO EN ENTERO ENTONCES EQ ESPECIFICO EXCEPTO FICHERO FINAL FINALMENTE FLECHA_DOBLE FUNCION GEQ GENERICO HASTA IDENTIFICADOR INTERFAZ LANZAR LEQ LISTA MIENTRAS MODIFICABLE NEQ OTRO OR PAQUETE PARA PATH POTENCIA PRIVADO PROBAR PROCEDIMIENTO PROGRAMA PUBLICO REAL REGISTRO REPITE SEA SALIR SEMIPUBLICO SI SINO TIPO VARIABLE
-%token <entero> CTC_ENTERA
-%token <real> CTC_REAL
-
-%start expresion_constante
-%nonassoc '-' '!'
-%left '*' '/' '%' 
-/*
-%
-*/
+%right OR
+%right AND
+%nonassoc '!'
+%left '<' '>' LEQ GEQ EQ NEQ
+%left '@'
+%left '^'
+%left '&'
+%left DESPI DESPD
+%left '+' '-'
+%left '*' '/' '%'
+%right POTENCIA
 
 %%
 
-/********************************/
-/* programas, paquetes y cargas */
-/********************************/
-programa : definicion_programa {printf ("programa -> definicion_programa");}
-          | definicion_paquete {printf ("programa -> definicion_paquete");}
+/************************************************************************************************************************************************************************************/
+/*                                                                      programas, paquetes y cargas                                                                                */
+/************************************************************************************************************************************************************************************/
+
+programa : definicion_programa
+         | definicion_paquete
 ;
 
-definicion_programa : PROGRAMA nombre ';' bloque_programa {printf ("definicion_programa -> PROGRAMA nombre ';' bloque_programa");}
+definicion_programa : PROGRAMA nombre ';' bloque_programa
 ;
 
-nombre : identificador_cuatro_ptos_asterisco IDENTIFICADOR {printf ("nombre -> identificador_cuatro_ptos_asterisco IDENTIFICADOR");}
+nombre : IDENTIFICADOR
+       | nombre CUATRO_PTOS IDENTIFICADOR
 ;
 
-identificador_cuatro_ptos_asterisco: IDENTIFICADOR CUATRO_PTOS {printf ("identificador_cuatro_ptos_asterisco -> IDENTIFICADOR CUATRO_PTOS");}
-| identificador_cuatro_ptos_asterisco IDENTIFICADOR CUATRO_PTOS {printf ("identificador_cuatro_ptos_asterisco -> identificador_cuatro_ptos_asterisco IDENTIFICADOR CUATRO_PTOS");}
-|                                                                {printf ("identificador_cuatro_ptos_asterisco -> vacio");}
+bloque_programa : bloque_instrucciones
+
+                | declaracion_cargas bloque_instrucciones
+                | declaracion_cargas declaracion_tipos bloque_instrucciones
+                | declaracion_cargas declaracion_constantes bloque_instrucciones
+                | declaracion_cargas declaracion_variables bloque_instrucciones
+                | declaracion_cargas declaracion_tipos declaracion_constantes bloque_instrucciones
+                | declaracion_cargas declaracion_tipos declaracion_variables bloque_instrucciones
+                | declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
+
+                | declaracion_tipos bloque_instrucciones
+                | declaracion_tipos declaracion_constantes bloque_instrucciones
+                | declaracion_tipos declaracion_variables bloque_instrucciones
+                |  declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
+
+                | declaracion_constantes bloque_instrucciones
+                | declaracion_constantes declaracion_variables bloque_instrucciones
+
+                | declaracion_variables bloque_instrucciones
+;
+               
+bloque_instrucciones : '{' instruccion_mas '}'
 ;
 
-bloque_programa :   declaracion_cargas_interrogacion {printf ("bloque_programa -> declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");}
-                    declaracion_tipos_interrogacion 
-                    declaracion_constantes_interrogacion 
-                    declaracion_variables_interrogacion 
-                    bloque_instrucciones 
+instruccion_mas : instruccion
+                | instruccion_mas instruccion
 ;
 
-declaracion_cargas_interrogacion : declaracion_cargas {printf ("declaracion_cargas_interrogacion -> declaracion_cargas");}
-|                                                     {printf ("declaracion_cargas_interrogacion -> vacio");}
+definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo
 ;
 
-declaracion_tipos_interrogacion : declaracion_tipos {printf ("declaracion_tipos_interrogacion -> declaracion_cargas");}
-|                                                   {printf ("declaracion_tipos_interrogacion -> vacio");}
+seccion_cabecera : CABECERA
+                 
+                 | CABECERA declaracion_cargas
+                 | CABECERA declaracion_cargas declaracion_tipos
+                 | CABECERA declaracion_cargas declaracion_constantes 
+                 | CABECERA declaracion_cargas declaracion_variables 
+                 | CABECERA declaracion_cargas declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_constantes 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_variables 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_constantes declaracion_variables 
+                 | CABECERA declaracion_cargas declaracion_constantes declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_variables declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_variables declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_constantes declaracion_variables declaracion_interfaces 
+                 | CABECERA declaracion_cargas declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces 
+
+                 | CABECERA declaracion_tipos
+                 | CABECERA declaracion_tipos declaracion_constantes 
+                 | CABECERA declaracion_tipos declaracion_variables 
+                 | CABECERA declaracion_tipos declaracion_interfaces 
+                 | CABECERA declaracion_tipos declaracion_constantes declaracion_variables 
+                 | CABECERA declaracion_tipos declaracion_constantes declaracion_interfaces 
+                 | CABECERA declaracion_tipos declaracion_variables declaracion_interfaces 
+                 | CABECERA declaracion_tipos declaracion_constantes declaracion_variables declaracion_interfaces 
+
+                 | CABECERA declaracion_constantes
+                 | CABECERA declaracion_constantes declaracion_variables 
+                 | CABECERA declaracion_constantes declaracion_interfaces 
+                 | CABECERA declaracion_constantes declaracion_variables declaracion_interfaces 
+
+                 | CABECERA declaracion_variables
+                 | CABECERA declaracion_variables declaracion_interfaces 
+
+                 | CABECERA declaracion_interfaces
 ;
 
-declaracion_constantes_interrogacion : declaracion_constantes {printf ("declaracion_constantes_interrogacion -> declaracion_constantes");}
-|                                                             {printf ("declaracion_constantes_interrogacion -> vacio");}
+seccion_cuerpo : CUERPO 
+
+               | CUERPO declaracion_tipos declaracion_subprograma_mas
+               | CUERPO declaracion_tipos declaracion_constantes declaracion_subprograma_mas
+               | CUERPO declaracion_tipos declaracion_variables declaracion_subprograma_mas
+               | CUERPO declaracion_tipos declaracion_constantes declaracion_variables declaracion_subprograma_mas
+  
+               | CUERPO declaracion_constantes declaracion_variables declaracion_subprograma_mas
+               | CUERPO declaracion_constantes declaracion_subprograma_mas
+ 
+               | CUERPO declaracion_variables declaracion_subprograma_mas
 ;
 
-declaracion_variables_interrogacion : declaracion_variables {printf ("declaracion_variables_interrogacion -> declaracion_variables");}
-|
+declaracion_subprograma_mas : declaracion_subprograma
+                            | declaracion_subprograma_mas declaracion_subprograma
 ;
+
+declaracion_cargas : CARGA declaracion_carga_mas ';'
+;
+
+declaracion_carga_mas : declaracion_carga
+                      | declaracion_carga_mas ',' declaracion_carga
+;
+
+declaracion_carga : nombre
+                  | nombre EN PATH 
+                  | nombre '(' nombre_mas')'
+                  | nombre EN PATH '(' nombre_mas')'
+;
+
+nombre_mas : nombre
+           | nombre_mas ',' nombre
+;
+
+/************************************************************************************************************************************************************************************/
+/*                                                                                    tipos                                                                                         */
+/************************************************************************************************************************************************************************************/
+
+declaracion_tipos : TIPO declaracion_tipo_mas
+;
+
+declaracion_tipo_mas : declaracion_tipo
+                     | declaracion_tipo_mas declaracion_tipo
+;
+
+declaracion_tipo : nombre '=' tipo_no_estructurado_o_nombre_tipo ';'    
+                 | nombre '=' tipo_estructurado                          
+;
+
+tipo_no_estructurado_o_nombre_tipo : nombre                
+                                   | tipo_escalar         
+                                   | tipo_fichero         
+                                   | tipo_enumerado       
+                                   | tipo_lista           
+                                   | tipo_lista_asociativa
+                                   | tipo_conjunto        
+;
+
+tipo_estructurado : tipo_registro                   
+                  | declaracion_clase               
+;
+
+tipo_escalar : ENTERO              
+             | REAL               
+             | BOOLEANO           
+             | CARACTER           
+             | CADENA             
+;
+
+tipo_fichero : FICHERO
+;
+
+tipo_enumerado : '(' expresion_constante_mas ')'
+;
+
+expresion_constante_mas : expresion_constante
+                        | expresion_constante_mas ',' expresion_constante
+;
+
+tipo_lista : LISTA DE tipo_no_estructurado_o_nombre_tipo
+           | LISTA rango_mas DE tipo_no_estructurado_o_nombre_tipo
+;
+
+rango_mas : rango
+          | rango_mas ',' rango
+;
+
+rango : expresion DOS_PTOS expresion 
+      | expresion DOS_PTOS expresion DOS_PTOS expresion
+;
+
+tipo_lista_asociativa : LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo
+;
+
+tipo_conjunto : CONJUNTO DE tipo_no_estructurado_o_nombre_tipo
+;
+
+tipo_registro : REGISTRO '{' declaracion_campo_mas '}'
+;
+
+declaracion_campo_mas : declaracion_campo
+                      | declaracion_campo_mas declaracion_campo
+;
+
+declaracion_campo : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';'
+;
+
+/************************************************************************************************************************************************************************************/
+/*                                                                                clases                                                                                            */
+/************************************************************************************************************************************************************************************/
+declaracion_clase : CLASE '{' declaraciones_publicas '}'
+
+                  | CLASE FINAL '{' declaraciones_publicas '}'
+                  | CLASE FINAL '(' nombre_mas ')' '{' declaraciones_publicas '}'
+                  | CLASE FINAL '{' declaraciones_publicas declaraciones_semi '}'
+                  | CLASE FINAL '{' declaraciones_publicas  declaraciones_privadas '}'
+                  | CLASE FINAL '(' nombre_mas ')' '{' declaraciones_publicas declaraciones_semi '}'
+                  | CLASE FINAL '(' nombre_mas ')' '{' declaraciones_publicas declaraciones_privadas '}'
+                  | CLASE FINAL '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
                   
-bloque_instrucciones : '{' instruccion_mas '}' {printf ("bloque_instrucciones -> '{' instruccion_mas '}'");}
+                  | CLASE '(' nombre_mas ')' '{' declaraciones_publicas '}'
+                  | CLASE '(' nombre_mas ')' '{' declaraciones_publicas declaraciones_semi '}'
+                  | CLASE '(' nombre_mas ')' '{' declaraciones_publicas declaraciones_privadas '}'
+                  | CLASE '(' nombre_mas ')' '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+
+                  | CLASE '{' declaraciones_publicas declaraciones_semi '}'
+                  | CLASE '{' declaraciones_publicas declaraciones_semi declaraciones_privadas '}'
+                  
+                  | CLASE '{' declaraciones_publicas declaraciones_privadas '}'
 ;
 
-instruccion_mas : instruccion {printf ("instruccion_mas -> instruccion");}
-| instruccion_mas instruccion {printf ("instruccion_mas -> instruccion_mas instruccion");}
+declaraciones_publicas : declaracion_componente_mas
+                       | PUBLICO declaracion_componente_mas
 ;
 
-/*
-instruccion_asterisco : instruccion //1
-| instruccion_asterisco instruccion //+1
-| //0
+declaraciones_semi : SEMIPUBLICO declaracion_componente_mas
 ;
 
-*/
-definicion_paquete : PAQUETE nombre ';' seccion_cabecera seccion_cuerpo {printf ("definicion_paquete -> PAQUETE nombre ';' seccion_cabecera seccion_cuerpo");}
+declaraciones_privadas : PRIVADO declaracion_componente_mas
 ;
 
-seccion_cabecera : CABECERA {printf ("seccion_cabecera -> CABECERA declaracion_cargas_interrogacion declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_interfaces");}
-                   declaracion_cargas_interrogacion 
-                   declaracion_tipos_interrogacion 
-                   declaracion_constantes_interrogacion 
-                   declaracion_variables_interrogacion 
-                   declaracion_interfaces 
+declaracion_componente_mas : declaracion_componente
+                           | declaracion_componente_mas declaracion_componente
 ;
 
-declaracion_interfaces_interrogacion : declaracion_interfaces {printf ("declaracion_interfaces_interrogacion -> declaracion_interfaces");}
-|                                                             {printf ("declaracion_interfaces_interrogacion -> vacio");}
+declaracion_componente : declaracion_tipo_anidado      
+                       | declaracion_constante_anidada
+                       | declaracion_atributos        
+                       | cabecera_subprograma ';'
+                       | cabecera_subprograma ';' modificadores ';' 
 ;
 
-seccion_cuerpo : CUERPO {printf ("seccion_cuerpo -> CUERPO declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion declaracion_subprograma_mas");}
-                 declaracion_tipos_interrogacion 
-                 declaracion_constantes_interrogacion 
-                 declaracion_variables_interrogacion 
-                 declaracion_subprograma_mas 
+declaracion_tipo_anidado : TIPO declaracion_tipo
 ;
 
-declaracion_subprograma_mas : declaracion_subprograma {printf ("declaracion_subprograma_mas -> declaracion_subprograma");}
-| declaracion_subprograma_mas declaracion_subprograma {printf ("declaracion_subprograma_mas -> declaracion_subprograma_mas declaracion_subprograma");}
+declaracion_constante_anidada : CONSTANTE declaracion_constante
 ;
 
-declaracion_cargas : CARGA declaracion_carga_mas ';' {printf ("declaracion_cargas -> CARGA declaracion_carga_mas ';'");}
+declaracion_atributos : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';'
 ;
 
-declaracion_carga_mas : declaracion_carga {printf ("declaracion_carga_mas -> declaracion_carga");}
-| declaracion_carga_mas declaracion_carga {printf ("declaracion_carga_mas -> declaracion_carga_mas declaracion_carga");}
+modificadores : modificador_mas
 ;
 
-declaracion_carga : nombre en_path_interrogacion nombre_mas_interrogacion {printf ("declaracion_carga -> nombre en_path_interrogacion nombre_mas_interrogacion");}
+modificador_mas : modificador
+                | modificador_mas ',' modificador
 ;
 
-en_path_interrogacion : EN PATH {printf ("en_path_interrogacion -> EN PATH");}
-|                               {printf ("en_path_interrogacion -> vacio");}
+modificador : GENERICO            
+            | ABSTRACTO           
+            | ESPECIFICO          
+            | FINAL               
 ;
 
-nombre_mas : nombre {printf ("nombre_mas -> nombre");}
-| nombre_mas nombre {printf ("nombre_mas -> nombre_mas nombre");}
+/************************************************************************************************************************************************************************************/
+/*                                                                              constantes                                                                                          */
+/************************************************************************************************************************************************************************************/
+
+declaracion_constantes : CONSTANTE declaracion_constante_mas
 ;
 
-nombre_mas_interrogacion : '(' nombre_mas ')' {printf ("nombre_mas_interrogacion -> '(' nombre_mas ')'");}
-|                                             {printf ("nombre_mas_interrogacion -> vacio");}
+declaracion_constante_mas : declaracion_constante
+                          | declaracion_constante_mas declaracion_constante
 ;
 
-/*********/
-/* tipos */
-/*********/
-
-declaracion_tipos : TIPO declaracion_tipo_mas {printf ("declaracion_tipos -> TIPO declaracion_tipo_mas");}
+declaracion_constante : nombre ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
 ;
 
-declaracion_tipo_mas : declaracion_tipo {printf ("declaracion_tipo_mas -> declaracion_tipo");}
-| declaracion_tipo_mas declaracion_tipo {printf ("declaracion_tipo_mas -> declaracion_tipo_mas declaracion_tipo");}
+valor_constante : expresion                  
+                | '[' valor_constante_mas ']'
+                | '[' clave_valor_mas ']'    
+                | '[' campo_valor_mas ']'    
 ;
 
-declaracion_tipo : nombre '=' tipo_no_estructurado_o_nombre_tipo ';'       {printf ("declaracion_tipo -> nombre '=' tipo_no_estructurado_o_nombre_tipo ';'");}
-                  | nombre '=' tipo_estructurado                           {printf ("declaracion_tipo -> nombre '=' tipo_estructurado ");}
+valor_constante_mas : valor_constante
+                    | valor_constante_mas ',' valor_constante
 ;
 
-tipo_no_estructurado_o_nombre_tipo : nombre                 {printf ("tipo_no_estructurado_o_nombre_tipo -> nombre");}
-                                    | tipo_escalar          {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_escalar");}
-                                    | tipo_fichero          {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_fichero");}
-                                    | tipo_enumerado        {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_enumerado");}
-                                    | tipo_lista            {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_lista");}
-                                    | tipo_lista_asociativa {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_lista_asociativa");}
-                                    | tipo_conjunto         {printf ("tipo_no_estructurado_o_nombre_tipo -> tipo_conjunto");}
+clave_valor_mas : clave_valor
+                | clave_valor_mas ',' clave_valor
 ;
 
-tipo_estructurado : tipo_registro                    {printf ("tipo_estructurado -> tipo_registro");}
-                  | declaracion_clase                {printf ("tipo_estructurado -> declaracion_clase");}
+campo_valor_mas : campo_valor
+                | campo_valor_mas ',' campo_valor
 ;
 
-tipo_escalar : ENTERO               {printf ("tipo_escalar -> ENTERO");}
-              | REAL                {printf ("tipo_escalar -> REAL");}
-              | BOOLEANO            {printf ("tipo_escalar -> BOOLEANO");}
-              | CARACTER            {printf ("tipo_escalar -> CARACTER");}
-              | CADENA              {printf ("tipo_escalar -> CADENA");}
+clave_valor : CTC_CADENA FLECHA_DOBLE valor_constante
 ;
 
-tipo_fichero : FICHERO {printf ("tipo_fichero -> FICHERO");}
+campo_valor : nombre FLECHA_DOBLE valor_constante
 ;
 
-tipo_enumerado : '(' expresion_constante_mas ')' {printf ("tipo_enumerado -> '(' expresion_constante_mas ')'");}
+/************************************************************************************************************************************************************************************/
+/*                                                                              variables                                                                                           */
+/************************************************************************************************************************************************************************************/
+
+declaracion_variables : VARIABLE declaracion_variable_mas
 ;
 
-expresion_constante_mas : expresion_constante {printf ("expresion_constante_mas -> expresion_constante");}
-| expresion_constante_mas expresion_constante {printf ("expresion_constante_mas -> expresion_constante_mas expresion_constante");}
+declaracion_variable_mas : declaracion_variable
+                         | declaracion_variable_mas declaracion_variable
 ;
 
-tipo_lista : LISTA rango_mas_interrogacion DE tipo_no_estructurado_o_nombre_tipo {printf ("tipo_lista -> LISTA rango_mas_interrogacion DE tipo_no_estructurado_o_nombre_tipo");}
+declaracion_variable : nombre_mas':' tipo_no_estructurado_o_nombre_tipo ';'
+                     | nombre_mas':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'
+
+/************************************************************************************************************************************************************************************/
+/*                                                                              interfaces                                                                                          */
+/************************************************************************************************************************************************************************************/
+declaracion_interfaces : INTERFAZ cabecera_subprograma_mas
 ;
 
-rango_mas : rango {printf ("rango_mas -> rango");}
-| rango_mas rango {printf ("rango_mas -> rango_mas rango");}
+cabecera_subprograma_mas : cabecera_subprograma ';'
+                         | cabecera_subprograma_mas cabecera_subprograma ';'
 ;
 
-rango_mas_interrogacion : '[' rango_mas ']' {printf ("rango_mas_interrogacion -> '[' rango_mas ']'");}
-|                                           {printf ("rango_mas_interrogacion -> vacio");}
+/************************************************************************************************************************************************************************************/
+/*                                                                             subprogramas                                                                                         */
+/************************************************************************************************************************************************************************************/
+
+declaracion_subprograma : cabecera_subprograma bloque_subprograma
 ;
 
-rango : expresion DOS_PTOS expresion expresion_interrogacion_ptos {printf ("rango -> expresion DOS_PTOS expresion expresion_interrogacion_ptos");}
+cabecera_subprograma : cabecera_funcion                      
+                     | cabecera_procedimiento               
+                     | cabecera_constructor                 
+                     | cabecera_destructor                  
 ;
 
-expresion_interrogacion_ptos : DOS_PTOS expresion {printf ("expresion_interrogacion_ptos -> DOS_PTOS expresion");}
-|                                                 {printf ("expresion_interrogacion_ptos -> vacio");}
+cabecera_funcion : FUNCION nombre  FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
+                 | FUNCION nombre declaracion_parametros FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo
 ;
 
-tipo_lista_asociativa : LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo {printf ("tipo_lista_asociativa -> LISTA ASOCIATIVA DE tipo_no_estructurado_o_nombre_tipo");}
+cabecera_procedimiento : PROCEDIMIENTO nombre 
+                       | PROCEDIMIENTO nombre declaracion_parametros
 ;
 
-tipo_conjunto : CONJUNTO DE tipo_no_estructurado_o_nombre_tipo {printf ("tipo_conjunto -> CONJUNTO DE tipo_no_estructurado_o_nombre_tipo");}
+cabecera_constructor : CONSTRUCTOR nombre 
+                     |CONSTRUCTOR nombre declaracion_parametros
 ;
 
-tipo_registro : REGISTRO '{' declaracion_campo_mas '}' {printf ("tipo_registro -> REGISTRO '{' declaracion_campo_mas '}'");}
+cabecera_destructor : DESTRUCTOR nombre
 ;
 
-declaracion_campo_mas : declaracion_campo {printf ("declaracion_campo_mas -> declaracion_campo");}
-| declaracion_campo_mas declaracion_campo {printf ("declaracion_campo_mas -> declaracion_campo_mas declaracion_campo");}
+declaracion_parametros : '(' lista_parametros_formales ')'
 ;
 
-declaracion_campo : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';' {printf ("declaracion_campo -> nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';'");}
+lista_parametros_formales : parametros_formales                              
+                          | lista_parametros_formales ';' parametros_formales
 ;
 
-expresion : |expresion_constante  {printf ("expresion -> expresion_constante");}
-            |expresion_primaria   {printf ("expresion -> expresion_primaria");}
+parametros_formales : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo             
+                    |  nombre_mas ':' tipo_no_estructurado_o_nombre_tipo MODIFICABLE
 ;
 
-/**********/
-/* CLASES */
-/**********/
-declaracion_clase : CLASE {printf ("declaracion_clase -> CLASE final_interrogacion nombre_mas_interrogacion '{' declaraciones_publicas declaraciones_semi_interrogacion declaraciones_privadas_interrogacion '}'");}
-                    final_interrogacion 
-                    nombre_mas_interrogacion 
-                    '{' 
-                    declaraciones_publicas 
-                    declaraciones_semi_interrogacion 
-                    declaraciones_privadas_interrogacion 
-                    '}' 
+bloque_subprograma : bloque_instrucciones 
+                   | declaracion_tipos bloque_instrucciones
+                   | declaracion_constantes bloque_instrucciones
+                   | declaracion_variables bloque_instrucciones
+                   | declaracion_tipos declaracion_constantes bloque_instrucciones
+                   | declaracion_tipos declaracion_variables bloque_instrucciones
+                   | declaracion_tipos declaracion_constantes declaracion_variables bloque_instrucciones
 ;
 
-final_interrogacion : FINAL {printf ("final_interrogacion -> FINAL");}
-|                           {printf ("final_interrogacion -> vacio");}
+/************************************************************************************************************************************************************************************/
+/*                                                                            instrucciones                                                                                         */
+/************************************************************************************************************************************************************************************/
+
+instruccion : ';'                        
+            | instruccion_asignacion     
+            | instruccion_salir          
+            | instruccion_devolver       
+            | instruccion_llamada        
+            | instruccion_si             
+            | instruccion_casos          
+            | instruccion_bucle          
+            | instruccion_probar_excepto 
+            | instruccion_lanzar         
 ;
 
-declaraciones_semi_interrogacion : declaraciones_semi {printf ("declaraciones_semi_interrogacion -> declaraciones_semi");}
-|                                                     {printf ("declaraciones_semi_interrogacion -> vacio");}
+instruccion_asignacion : objeto '=' expresion ';'
 ;
 
-declaraciones_privadas_interrogacion : declaraciones_privadas {printf ("declaraciones_privadas_interrogacion -> declaraciones_privadas");}
-|                                                             {printf ("declaraciones_privadas_interrogacion -> vacio");}
+instruccion_salir : SALIR ';'
+                  | SALIR SI expresion ';'
 ;
 
-declaraciones_publicas : publico_interrogacion declaracion_componente_mas {printf ("declaraciones_publicas -> publico_interrogacion declaracion_componente_mas");}
+instruccion_devolver : DEVOLVER ';'
+                     | DEVOLVER expresion ';'
 ;
 
-declaraciones_semi : SEMIPUBLICO declaracion_componente_mas {printf ("declaraciones_semi -> SEMIPUBLICO declaracion_componente_mas");}
+instruccion_llamada : llamada_subprograma ';'
 ;
 
-declaraciones_privadas : PRIVADO declaracion_componente_mas {printf ("declaraciones_privadas -> PRIVADO declaracion_componente_mas");}
+llamada_subprograma : nombre '(' expresion_asterisco ')'
 ;
 
-publico_interrogacion : PUBLICO {printf ("publico_interrogacion -> PUBLICO");}
-|                               {printf ("publico_interrogacion -> vacio");}
+instruccion_si : SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones_interrogacion
 ;
 
-declaracion_componente_mas : declaracion_componente {printf ("declaracion_componente_mas -> declaracion_componente");}
-| declaracion_componente_mas declaracion_componente {printf ("declaracion_componente_mas -> declaracion_componente_mas declaracion_componente");}
+bloque_instrucciones_interrogacion :                        
+                                   | bloque_instrucciones
 ;
 
-declaracion_componente : declaracion_tipo_anidado       {printf ("declaracion_componente -> declaracion_tipo_anidado");}
-                        | declaracion_constante_anidada {printf ("declaracion_componente -> declaracion_constante_anidada");}
-                        | declaracion_atributos         {printf ("declaracion_componente -> declaracion_atributos");}
-                        | cabecera_subprograma ';' modificadores_interrogacion {printf ("declaracion_componente -> cabecera_subprograma ';' modificadores_interrogacion");}
+instruccion_casos : EN CASO expresion SEA caso_mas ';'
 ;
 
-modificadores_interrogacion : modificadores ';' {printf ("modificadores_interrogacion ->  modificadores ';'");}
-|                                               {printf ("modificadores_interrogacion -> vacio");}
+caso_mas : caso
+         | caso_mas caso
+;
+
+caso :  entradas FLECHA_DOBLE bloque_instrucciones 
+;
+
+entradas : entrada 
+         | entrada_asterisco entrada
+;
+
+entrada_asterisco : entrada '|'
+                  | entrada_asterisco entrada '|'
 ; 
 
-declaracion_tipo_anidado : TIPO declaracion_tipo {printf ("declaracion_tipo_anidado -> TIPO declaracion_tipo");}
+entrada : expresion        
+        | rango            
+        | OTRO             
 ;
 
-declaracion_constante_anidada : CONSTANTE declaracion_constante {printf ("declaracion_constante_anidada -> CONSTANTE declaracion_constante");}
+instruccion_bucle : clausula_iteracion bloque_instrucciones
 ;
 
-declaracion_atributos : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';' {printf ("declaracion_atributos -> nombre_mas ':' tipo_no_estructurado_o_nombre_tipo ';'");}
+clausula_iteracion : PARA nombre EN objeto                                     
+                   | REPITE ELEMENTO nombre EN rango 
+                   | REPITE ELEMENTO nombre EN rango DESCENDENTE
+                   | MIENTRAS expresion                                       
+                   | REPITE HASTA expresion                                   
 ;
 
-modificadores : modificador_mas {printf ("modificadores -> modificador_mas");}
-;
-
-modificador_mas : modificador {printf ("modificador_mas -> modificador");}
-| modificador_mas modificador {printf ("modificador_mas -> modificador_mas modificador");}
-;
-
-modificador : GENERICO             {printf ("modificador -> GENERICO");}
-            | ABSTRACTO            {printf ("modificador -> ABSTRACTO");}
-            | ESPECIFICO           {printf ("modificador -> ESPECIFICO");}
-            | FINAL                {printf ("modificador -> FINAL");}
-;
-
-/**************/
-/* constantes */
-/**************/
-
-declaracion_constantes : CONSTANTE declaracion_constante_mas {printf ("declaracion_constantes -> CONSTANTE declaracion_constante_mas");}
-;
-
-declaracion_constante_mas : declaracion_constante {printf ("declaracion_constante_mas -> declaracion_constante");}
-| declaracion_constante_mas declaracion_constante {printf ("declaracion_constante_mas -> declaracion_constante_mas declaracion_constante");}
-;
-
-declaracion_constante : nombre ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';' {printf ("declaracion_constante -> nombre ':' tipo_no_estructurado_o_nombre_tipo '=' valor_constante ';'");}
-;
-
-valor_constante : expresion                   {printf ("valor_constante -> expresion");}
-                | '[' valor_constante_mas ']' {printf ("valor_constante ->  '[' valor_constante_mas ']'");}
-                | '[' clave_valor_mas ']'     {printf ("valor_constante -> '[' clave_valor_mas ']'");}
-                | '[' campo_valor_mas ']'     {printf ("valor_constante -> '[' campo_valor_mas ']' ");}
-;
-
-valor_constante_mas : valor_constante {printf ("valor_constante_mas -> valor_constante");}
-| valor_constante_mas valor_constante {printf ("valor_constante_mas -> valor_constante_mas valor_constante");}
-;
-
-clave_valor_mas : clave_valor {printf ("clave_valor_mas -> clave_valor");}
-| clave_valor_mas clave_valor {printf ("clave_valor_mas -> clave_valor_mas clave_valor");}
-;
-
-campo_valor_mas : campo_valor {printf ("campo_valor_mas -> campo_valor");}
-| campo_valor_mas campo_valor {printf ("campo_valor_mas -> campo_valor_mas campo_valor");}
-;
-
-clave_valor : CTC_CADENA FLECHA_DOBLE valor_constante {printf ("clave_valor ->  CTC_CADENA FLECHA_DOBLE valor_constante");}
-;
-
-campo_valor : nombre FLECHA_DOBLE valor_constante {printf ("campo_valor -> nombre FLECHA_DOBLE valor_constante");}
-;
-
-/*************/
-/* variables */
-/*************/
-
-declaracion_variables : VARIABLE declaracion_variable_mas {printf ("declaracion_variables -> VARIABLE declaracion_variable_mas");}
-;
-
-declaracion_variable_mas : declaracion_variable {printf ("declaracion_variable_mas -> declaracion_variable");}
-| declaracion_variable_mas declaracion_variable {printf ("declaracion_variable_mas -> declaracion_variable_mas declaracion_variable");}
-;
-
-declaracion_variable : nombre_mas':' tipo_no_estructurado_o_nombre_tipo {printf ("declaracion_variable -> nombre_mas':' tipo_no_estructurado_o_nombre_tipo valor_constante_interrogacion ';'");}
-                       valor_constante_interrogacion ';' 
-
-valor_constante_interrogacion : '=' valor_constante {printf ("valor_constante_interrogacion ->'=' valor_constante");}
-|                                                   {printf ("valor_constante_interrogacion -> vacio");}
-;
-
-
-/**************/
-/* interfaces */
-/**************/
-declaracion_interfaces : INTERFAZ cabecera_subprograma_mas {printf ("declaracion_interfaces -> INTERFAZ cabecera_subprograma_mas");}
-;
-
-cabecera_subprograma_mas : cabecera_subprograma ';' {printf ("cabecera_subprograma_mas -> cabecera_subprograma ';'");}
-| cabecera_subprograma_mas cabecera_subprograma ';' {printf ("cabecera_subprograma_mas -> cabecera_subprograma_mas cabecera_subprograma ';'");}
-;
-
-/****************/
-/* subprogramas */
-/****************/
-
-declaracion_subprograma : cabecera_subprograma bloque_subprograma {printf ("declaracion_subprograma -> cabecera_subprograma bloque_subprograma");}
-;
-
-cabecera_subprograma : cabecera_funcion                       {printf ("cabecera_subprograma -> cabecera_funcion");}
-                      | cabecera_procedimiento                {printf ("cabecera_subprograma -> cabecera_procedimiento");}
-                      | cabecera_constructor                  {printf ("cabecera_subprograma -> cabecera_constructor");}
-                      | cabecera_destructor                   {printf ("cabecera_subprograma -> cabecera_destructor");}
-;
-
-cabecera_funcion : FUNCION {printf ("cabecera_funcion -> FUNCION nombre declaracion_parametros_interrogacion FLECHA_DOBLE tipo_no_estructurado_o_nombre_tipo");}
-                   nombre 
-                   declaracion_parametros_interrogacion 
-                   FLECHA_DOBLE 
-                   tipo_no_estructurado_o_nombre_tipo 
-;
-
-declaracion_parametros_interrogacion : declaracion_parametros {printf ("declaracion_parametros_interrogacion -> declaracion_parametros");}
-|                                                             {printf ("declaracion_parametros_interrogacion -> vacio");}
-;
-
-cabecera_procedimiento : PROCEDIMIENTO nombre declaracion_parametros_interrogacion {printf ("cabecera_procedimiento -> PROCEDIMIENTO nombre declaracion_parametros_interrogacion");}
-;
-
-cabecera_constructor : CONSTRUCTOR nombre declaracion_parametros_interrogacion {printf ("cabecera_constructor -> CONSTRUCTOR nombre declaracion_parametros_interrogacion");}
-;
-
-cabecera_destructor : DESTRUCTOR nombre {printf ("cabecera_destructor -> DESTRUCTOR nombre");}
-;
-
-declaracion_parametros : '(' lista_parametros_formales ')' {printf ("declaracion_parametros -> '(' lista_parametros_formales ')'");}
-;
-
-lista_parametros_formales : parametros_formales                               {printf ("lista_parametros_formales -> parametros_formales");}
-                          | lista_parametros_formales ';' parametros_formales {printf ("lista_parametros_formales -> lista_parametros_formales ';' parametros_formales");}
-;
-
-parametros_formales : nombre_mas ':' tipo_no_estructurado_o_nombre_tipo modificable_interrogacion {printf ("parametros_formales -> nombre_mas ':' tipo_no_estructurado_o_nombre_tipo modificable_interrogacion");}
-;
-
-modificable_interrogacion : MODIFICABLE {printf ("modificable_interrogacion -> MODIFICABLE");}
-|                                       {printf ("modificable_interrogacion -> vacio");}
-;
-
-bloque_subprograma : declaracion_tipos_interrogacion {printf ("bloque_subprograma -> declaracion_tipos_interrogacion declaracion_constantes_interrogacion declaracion_variables_interrogacion bloque_instrucciones");}
-                     declaracion_constantes_interrogacion
-                     declaracion_variables_interrogacion
-                     bloque_instrucciones
-;
-
-/*****************/
-/* instrucciones */
-/*****************/
-
-instruccion : ';'                         {printf ("instruccion -> ';'");}
-            | instruccion_asignacion      {printf ("instruccion -> instruccion_asignacion");}
-            | instruccion_salir           {printf ("instruccion -> instruccion_salir");}
-            | instruccion_devolver        {printf ("instruccion -> instruccion_devolver");}
-            | instruccion_llamada         {printf ("instruccion -> instruccion_llamada");}
-            | instruccion_si              {printf ("instruccion -> instruccion_si");}
-            | instruccion_casos           {printf ("instruccion -> instruccion_casos");}
-            | instruccion_bucle           {printf ("instruccion -> instruccion_bucle");}
-            | instruccion_probar_excepto  {printf ("instruccion -> instruccion_probar_excepto");}
-            | instruccion_lanzar          {printf ("instruccion -> instruccion_lanzar");}
-;
-
-instruccion_asignacion : objeto '=' expresion ';' {printf ("instruccion_asignacion -> objeto '=' expresion ';'");}
-;
-
-instruccion_salir : SALIR si_expresion_interrogacion ';' {printf ("instruccion_salir -> SALIR si_expresion_interrogacion ';'");}
-;
-
-si_expresion_interrogacion : SI expresion {printf ("si_expresion_interrogacion -> SI expresion");}
-|                                         {printf ("si_expresion_interrogacion -> vacio");}
-;
-
-instruccion_devolver : DEVOLVER expresion_interrogacion ';' {printf ("instruccion_devolver -> DEVOLVER expresion_interrogacion ';'");}
-;
-
-expresion_interrogacion : expresion {printf ("expresion_interrogacion -> expresion");}
-|                                   {printf ("expresion_interrogacion -> vacio");}
-;
-
-instruccion_llamada : llamada_subprograma ';' {printf ("instruccion_llamada -> llamada_subprograma ';'");}
-;
-
-llamada_subprograma : nombre '(' expresion_asterisco ')' {printf ("llamada_subprograma -> nombre '(' expresion_asterisco ')'");}
-;
-
-expresion_asterisco : expresion {printf ("expresion_asterisco -> expresion");}
-| expresion_asterisco expresion {printf ("expresion_asterisco -> expresion_asterisco expresion");}
-|                               {printf ("expresion_asterisco -> vacio");}
-;
-
-instruccion_si : SI expresion                            {printf ("instruccion_si -> SI expresion");}
-                 ENTONCES bloque_instrucciones           {printf ("instruccion_si -> ENTONCES bloque_instrucciones");}
-                 bloque_instrucciones_sino_interrogacion {printf ("instruccion_si -> bloque_instrucciones_sino_interrogacion");}
-;
-
-bloque_instrucciones_sino_interrogacion : SINO bloque_instrucciones {printf ("bloque_instrucciones_sino_interrogacion -> SINO bloque_instrucciones");}
-|                                                                   {printf ("bloque_instrucciones_sino_interrogacion -> vacio");}
-;
-
-instruccion_casos : EN CASO expresion SEA caso_mas ';' {printf ("instruccion_casos -> EN CASO expresion SEA caso_mas ';'");}
-;
-
-caso_mas : caso {printf ("caso_mas -> caso");}
-| caso_mas caso {printf ("caso_mas -> caso_mas caso");}
-;
-
-caso : CUANDO entradas FLECHA_DOBLE bloque_instrucciones  {printf ("caso -> CUANDO entradas FLECHA_DOBLE bloque_instrucciones");}
-;
-
-entradas : entrada_asterisco entrada  {printf ("entradas -> entrada_asterisco entrada");}
-;
-
-entrada_asterisco : entrada '|' {printf ("entrada_asterisco -> entrada '|'");}
-| entrada_asterisco entrada '|' {printf ("entrada_asterisco -> entrada_asterisco entrada '|'");}
-|                               {printf ("entrada_asterisco -> vacio");}
-; 
-
-entrada : expresion         {printf ("entrada -> expresion");}
-        | rango             {printf ("entrada -> rango");}
-        | OTRO              {printf ("entrada -> OTRO");}
-;
-
-instruccion_bucle : clausula_iteracion bloque_instrucciones {printf ("instruccion_bucle -> clausula_iteracion bloque_instrucciones");}
-;
-
-clausula_iteracion : PARA nombre EN objeto                                      {printf ("clausula_iteracion -> PARA nombre EN objeto");}
-                    | REPITE ELEMENTO nombre EN rango descendente_interrogacion {printf ("clausula_iteracion -> REPITE ELEMENTO nombre EN rango descendente_interrogacion");}
-                    | MIENTRAS expresion                                        {printf ("clausula_iteracion -> MIENTRAS expresion");}
-                    | REPITE HASTA expresion                                    {printf ("clausula_iteracion -> REPITE HASTA expresion");}
-;
-
-descendente_interrogacion : DESCENDENTE {printf ("descendente_interrogacion -> DESCENDENTE");}
-|
-;
-
-instruccion_probar_excepto : PROBAR bloque_instrucciones              {printf ("instruccion_probar_excepto -> PROBAR bloque_instrucciones");}
-                             EXCEPTO clausula_excepcion_mas           {printf ("instruccion_probar_excepto -> EXCEPTO clausula_excepcion_mas");}
-                             bloque_instrucciones_final_interrogacion {printf ("instruccion_probar_excepto -> bloque_instrucciones_final_interrogacion");}
+instruccion_probar_excepto : PROBAR bloque_instrucciones EXCEPTO clausula_excepcion_mas          
+                           | PROBAR bloque_instrucciones EXCEPTO clausula_excepcion_mas FINALMENTE bloque_instrucciones
 
 ;
 
-clausula_excepcion_mas : clausula_excepcion {printf ("clausula_excepcion_mas -> clausula_excepcion");}
-| clausula_excepcion_mas clausula_excepcion {printf ("clausula_excepcion_mas -> clausula_excepcion_mas clausula_excepcion");}
+clausula_excepcion_mas : clausula_excepcion
+                       | clausula_excepcion_mas clausula_excepcion
 ;
 
-bloque_instrucciones_final_interrogacion : FINALMENTE bloque_instrucciones  {printf ("bloque_instrucciones_final_interrogacion -> FINALMENTE bloque_instrucciones");}
-|                                                                           {printf ("bloque_instrucciones_final_interrogacion -> vacio");}
+clausula_excepcion : CUANDO nombre EJECUTA bloque_instrucciones
 ;
 
-clausula_excepcion : CUANDO nombre EJECUTA bloque_instrucciones {printf ("clausula_excepcion -> CUANDO nombre EJECUTA bloque_instrucciones");}
+instruccion_lanzar : LANZAR nombre ';'
 ;
 
-instruccion_lanzar : LANZAR nombre ';'  {printf ("instruccion_lanzar -> LANZAR nombre ';'");}
+/************************************************************************************************************************************************************************************/
+/*                                                                              expresiones                                                                                         */
+/************************************************************************************************************************************************************************************/
+
+expresion_constante : CTC_ENTERA             
+                    | CTC_REAL               
+                    | CTC_CADENA             
+                    | CTC_CARACTER           
+                    | CTC_BOOLEANA           
 ;
 
-/***************/
-/* expresiones */
-/***************/
-expresion_constante : CTC_ENTERA   {printf ("expresion_constante -> CTC_ENTERA");}
-                    | CTC_REAL     {printf ("expresion_constante -> CTC_REAL");}
-                    | CTC_CADENA   {printf ("expresion_constante -> CTC_CADENA");}
-                    | CTC_CARACTER {printf ("expresion_constante -> CTC_CARACTER");}
-                    | CTC_BOOLEANA {printf ("expresion_constante -> CTC_BOOLEANA");}
+expresion_primaria : expresion_constante     
+                   | objeto                 
+                   | llamada_subprograma    
+                   | '(' expresion ')'
 ;
 
-expresion_primaria : expresion_constante  {printf ("expresion_primaria -> expresion_constante");}
-                    | objeto              {printf ("expresion_primaria -> objeto");}
-                    | llamada_subprograma {printf ("expresion_primaria -> llamada_subprograma");}
-                    | '(' expresion ')'   {printf ("expresion_primaria -> '(' expresion ')'");}
+expresion_unaria : '-' expresion 
+                 | '!' expresion
 ;
 
-objeto : nombre                       {printf ("objeto -> nombre");}
-      | objeto '['  expresion  ']'    {printf ("objeto -> objeto '[' expresion ']'");}
-      | objeto '.' IDENTIFICADOR      {printf ("objeto -> objeto '.' IDENTIFICADOR");}
+expresion_binaria : expresion POTENCIA expresion
+                  | expresion '*' expresion
+                  | expresion '/' expresion
+                  | expresion '%' expresion
+                  | expresion '+' expresion
+                  | expresion '-' expresion
+                  | expresion DESPI expresion
+                  | expresion DESPD expresion
+                  | expresion '&' expresion
+                  | expresion '^' expresion
+                  | expresion '@' expresion
+                  | expresion '<' expresion
+                  | expresion '>' expresion
+                  | expresion GEQ expresion
+                  | expresion LEQ expresion
+                  | expresion EQ expresion
+                  | expresion NEQ expresion
+                  | expresion AND expresion
+                  | expresion OR expresion
 ;
 
-expresion_mas : expresion {printf ("expresion_mas -> expresion");}
-| expresion_mas expresion {printf ("expresion_mas -> expresion_mas expresion");}
+objeto : nombre                              
+       | objeto '[' expresion_mas ']'      
+       | objeto '.' IDENTIFICADOR             
 ;
 
+expresion_mas : expresion                    
+              | expresion_mas ',' expresion  
+;
+
+expresion_asterisco : 
+                    | expresion
+                    | expresion_asterisco ',' expresion                 
+;
+
+expresion : expresion_primaria              
+          | expresion_unaria
+          | expresion_binaria
+;
 
 %%
 

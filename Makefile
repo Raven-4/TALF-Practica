@@ -6,3 +6,4 @@ moronico.lex.c:	moronico.l
 	win_flex moronico.l
 clean:
 	rm  moronico.tab.c moronico.tab.h moronico.output lex.yy.c moronico
+
